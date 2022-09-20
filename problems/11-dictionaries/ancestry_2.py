@@ -21,10 +21,6 @@ unique_elements = list()
 for i in range(entries_count - 1):
     child, parent = input().split(sep=' ')
     pairs_input[child] = parent
-    if child not in unique_elements:
-        unique_elements.append(child)
-    if parent not in unique_elements:
-        unique_elements.append(parent)
 
 
 # adjacency list
