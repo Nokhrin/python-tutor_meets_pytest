@@ -34,19 +34,18 @@ def get_input():
 
 
 numbers_count, list_of_guesses = get_input()
-wrong_numbers_set = set()
-possibly_right_numbers_set = set(i for i in range(1, numbers_count + 1))
+whole_numbers_set = set(i for i in range(1, numbers_count + 1))
+possible_numbers_set = whole_numbers_set
 
 for guess_set in list_of_guesses:
-    if len(guess_set) <= numbers_count // 2:
-        possibly_right_numbers_set.difference_update(guess_set)
-        print(len(guess_set))
-        print(len(possibly_right_numbers_set))
+    current_set = possible_numbers_set & guess_set
+    if len(current_set) <= len(possible_numbers_set) // 2:
         print('NO')
+        possible_numbers_set = possible_numbers_set - guess_set
     else:
-        possibly_right_numbers_set.intersection_update(guess_set)
         print('YES')
+        possible_numbers_set = possible_numbers_set - (whole_numbers_set - guess_set)
 
-possible_numbers_list = [str(number) for number in sorted(list(possibly_right_numbers_set))]
+possible_numbers_list = [str(number) for number in sorted(list(possible_numbers_set))]
 result_str = ' '.join(possible_numbers_list)
 print(result_str)
