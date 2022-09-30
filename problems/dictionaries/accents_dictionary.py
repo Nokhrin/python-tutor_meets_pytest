@@ -47,29 +47,39 @@
 В остальных словах либо ударные все буквы (в слове PAGE), либо не поставлено ни одного ударения.
 """
 
-# compose the accents dictionary
-accents_dict = dict()
-for word_index in range(int(input())):
-    word = input()
-    if word.lower() not in accents_dict.keys():
-        accents_dict[word.lower()] = {word}
-    else:
-        accents_dict[word.lower()].add(word)
 
-# check text for errors
-text_to_check_list = input().split(sep=' ')
-mistakes_count = 0
-# take word by word and check it's accents in the dictionary
-for word in text_to_check_list:
-    # no mistake - if there is only one accent and
-    # the word is not in the dictionary
-    # or the accent in the word is the same as in the dictionary
+def check_accents(input_count: int, input_words: list, input_check: str) -> int:
+    # compose the accents dictionary
+    accents_dict = dict()
+    for word_index in range(input_count):
+        word = input_words[word_index]
+        if word.lower() not in accents_dict.keys():
+            accents_dict[word.lower()] = {word}
+        else:
+            accents_dict[word.lower()].add(word)
 
-    # count accents provided
-    upper_count = sum(1 for char in word if char.isupper())
-    if not (upper_count == 1 and
-            (word.lower() not in accents_dict or
-             word in accents_dict[word.lower()])):
-        mistakes_count += 1
+    # check text for errors
+    text_to_check_list = input_check.split(sep=' ')
+    mistakes_count = 0
+    # take word by word and check it's accents in the dictionary
+    for word in text_to_check_list:
+        # no mistake - if there is only one accent and
+        # the word is not in the dictionary
+        # or the accent in the word is the same as in the dictionary
 
-print(mistakes_count)
+        # count accents provided
+        upper_count = sum(1 for char in word if char.isupper())
+        if not (upper_count == 1 and
+                (word.lower() not in accents_dict or
+                 word in accents_dict[word.lower()])):
+            mistakes_count += 1
+
+    return mistakes_count
+
+
+# input_example = [
+#     4,
+#     ['cAnnot', 'cannOt', 'fOund', 'pAge'],
+#     'thE pAge cAnnot be found'
+# ]
+# print(check_accents(input_example[0], input_example[1], input_example[2]))

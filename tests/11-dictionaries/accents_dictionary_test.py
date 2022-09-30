@@ -1,4 +1,14 @@
 import pytest
+import problems.dictionaries.accents_dictionary as accents
+
+
+input_example = [
+    4,
+    ['cAnnot', 'cannOt', 'fOund', 'pAge'],
+    'thE pAge cAnnot be found'
+]
+
+print(accents.check_accents(input_example[0], input_example[1], input_example[2]))
 
 """
 4
