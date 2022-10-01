@@ -19,14 +19,23 @@ i-я партия объявляет забастовки строго кажд�
 i-я строка содержит числа a_i и b_i.
 Вам нужно определить число забастовок, произошедших в этой стране в течение года.
 """
-days_in_year, strikes_count = [int(number) for number in input().split(sep=' ')]
-strike_days = set()
-for i in range(strikes_count):
-    start_day, interval = [int(number) for number in input().split(sep=' ')]
-    day = start_day
-    while day <= days_in_year:
-        if (day + 1) % 7 != 0 and day % 7 != 0:  # if it's not saturday or sunday
-            strike_days.add(day)
-        day += interval
 
-print(len(strike_days), end='')
+def count_strikes(N_and_K: str, schedules: list) -> int:
+    """
+    :param N_and_K: N - days in the year count; K - following input strings count
+    :param schedules: strikes schedule list of a_i (start day) and b_i (days between strikes)
+    :return: number of days in strikes
+    """
+    days_in_year, strikes_count = [int(number) for number in N_and_K.split(sep=' ')]
+    strike_days = set()
+    for i in range(strikes_count):
+        for schedule in schedules:
+            schedule_list = schedule.split(sep=' ')
+            start_day, interval = int(schedule_list[0]), int(schedule_list[1])
+            day = start_day
+            while day <= days_in_year:
+                if (day + 1) % 7 != 0 and day % 7 != 0:  # if it's not saturday or sunday
+                    strike_days.add(day)
+                day += interval
+
+    return str(len(strike_days))

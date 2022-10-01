@@ -1,27 +1,30 @@
 import pytest
+
 import problems.dictionaries.accents_dictionary as accents
 
 
 input_example = [
-    4,
-    ['cAnnot', 'cannOt', 'fOund', 'pAge'],
-    'thE pAge cAnnot be found'
+    (
+        4,
+        ['cAnnot', 'cannOt', 'fOund', 'pAge'],
+        'thE pAge cAnnot be found',
+    ),
 ]
 
-print(accents.check_accents(input_example[0], input_example[1], input_example[2]))
+
+@pytest.mark.smoke
+def test_accents_dictionary():
+    """checks if number of mistakes found is correct"""
+    test_input = [
+        4,
+        ['cAnnot', 'cannaccentsOt', 'fOund', 'pAge'],
+        'thE pAge cAnnot be found'
+    ]
+    expected_result = 2
+    actual_result = accents.check_accents(test_input[0], test_input[1], test_input[2])
+    assert expected_result == actual_result
 
 """
-4
-cAnnot
-cannOt
-fOund
-pAge
-thE pAge cAnnot be found
-
-
-
-2
-
 4
 cAnnot
 cannOt
