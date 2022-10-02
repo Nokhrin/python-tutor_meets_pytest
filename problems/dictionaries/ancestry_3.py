@@ -15,35 +15,48 @@
 """
 
 
-def find_lca(node_1, node_2, tree):
-    """returns the lowest common ancestor of node_1 and node_2 from tree"""
-    next_parent = node_1
-    node_1_parents = [node_1]
-    while next_parent in tree.keys():
-        node_1_parents.append(tree[next_parent])
-        next_parent = tree[next_parent]
+def get_lca(pairs_count: str, node_1_and_node_2: list, requests_count: str, requests: list) -> list:
+    """
+    Find the lowest common ancestor (lca) of node_1 and node_2
 
-    next_parent = node_2
-    node_2_parents = [node_2]
+    :param pairs_count: expected total number of child-parent paires to be processed
+    :param node_1_and_node_2: list of strings with '<child name> <parent name>'
+    :param requests_count: expected total number of requests
+    :param requests: list of strings with requests
+    :return: list of string, where each string is the name of lca
+    """
 
-    while next_parent in tree.keys():
-        node_2_parents.append(tree[next_parent])
-        next_parent = tree[next_parent]
+    def find_lca(node_1, node_2, tree):
+        """Return the lowest common ancestor of node_1 and node_2 from tree."""
+        next_parent = node_1
+        node_1_parents = [node_1]
+        while next_parent in tree.keys():
+            node_1_parents.append(tree[next_parent])
+            next_parent = tree[next_parent]
 
-    for parent_1 in node_1_parents:
-        if parent_1 in node_2_parents:
-            return parent_1
+        next_parent = node_2
+        node_2_parents = [node_2]
 
+        while next_parent in tree.keys():
+            node_2_parents.append(tree[next_parent])
+            next_parent = tree[next_parent]
 
-entries_count = int(input())
-child_parent_pairs_dict = dict()
-for i in range(entries_count - 1):
-    child, parent = input().split(sep=' ')
-    child_parent_pairs_dict[child] = parent
+        for parent_1 in node_1_parents:
+            if parent_1 in node_2_parents:
+                return parent_1
 
-requests_count = int(input())
-for r in range(requests_count):
-    name_1, name_2 = input().split(sep=' ')
-    print(find_lca(name_1, name_2, child_parent_pairs_dict), end='')
-    if r < requests_count - 1:
-        print()
+    entries_count = int(pairs_count)
+    child_parent_pairs_dict = dict()
+    for i in range(entries_count - 1):
+        child, parent = node_1_and_node_2[i].split(sep=' ')
+        child_parent_pairs_dict[child] = parent
+
+    requests_count = int(requests_count)
+    lca_list = []
+    for r in range(requests_count):
+        name_1, name_2 = requests[r].split(sep=' ')
+        # print(find_lca(name_1, name_2, child_parent_pairs_dict), end='')
+        lca_list.append(find_lca(name_1, name_2, child_parent_pairs_dict))
+        # if r < requests_count - 1:
+        #     print()
+    return lca_list

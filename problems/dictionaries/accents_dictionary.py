@@ -48,10 +48,10 @@
 """
 
 
-def check_accents(input_count: int, input_words: list, input_check: str) -> int:
+def check_accents(input_count: str, input_words: list, input_check: str) -> int:
     # compose the accents dictionary
     accents_dict = dict()
-    for word_index in range(input_count):
+    for word_index in range(int(input_count)):
         word = input_words[word_index]
         if word.lower() not in accents_dict.keys():
             accents_dict[word.lower()] = {word}
@@ -75,11 +75,3 @@ def check_accents(input_count: int, input_words: list, input_check: str) -> int:
             mistakes_count += 1
 
     return mistakes_count
-
-
-# input_example = [
-#     4,
-#     ['cAnnot', 'cannOt', 'fOund', 'pAge'],
-#     'thE pAge cAnnot be found'
-# ]
-# print(check_accents(input_example[0], input_example[1], input_example[2]))

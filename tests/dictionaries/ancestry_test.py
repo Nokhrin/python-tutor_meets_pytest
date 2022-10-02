@@ -1,8 +1,7 @@
 import pytest
 from problems.dictionaries import ancestry_1
-
-# from problems.dictionaries import ancestry_2
-# from problems.dictionaries import ancestry_3
+from problems.dictionaries import ancestry_2
+from problems.dictionaries import ancestry_3
 
 """
 exploring parametrized fixtures
@@ -12,10 +11,9 @@ create fixture with input data for ancestry_1, ancestry_2, ancestry_3
 
 # arrange test input as fixture - the most basic usage
 @pytest.fixture(
+    scope='module',
     params=
     [
-        ('9', ['Alexei Peter_I', 'Anna Peter_I', 'Elizabeth Peter_I', 'Peter_II Alexei', 'Peter_III Anna',
-               'Paul_I Peter_III', 'Alexander_I Paul_I', 'Nicholaus_I Paul_I']),
         ('9', ['Alexei Peter_I', 'Anna Peter_I', 'Elizabeth Peter_I', 'Peter_II Alexei', 'Peter_III Anna',
                'Paul_I Peter_III', 'Alexander_I Paul_I', 'Nicholaus_I Paul_I']),
     ]
@@ -24,22 +22,80 @@ def actual_import(request):
     return request.param
 
 
+@pytest.fixture(
+    params=[
+        ('3', ['Anna Nicholaus_I', 'Peter_II Peter_I', 'Alexei Paul_I']),
+        ('3', ['Anna Nicholaus_I', 'Peter_II Peter_I', 'Alexei Paul_I']),
+    ]
+)
+def get_requests_2(request):
+    """Return data for requests for problem 2."""
+    return request.param
+
+
+@pytest.fixture(
+    scope='function',
+    params=[
+        ('3', ['Alexander_I Nicholaus_I', 'Peter_II Paul_I', 'Alexander_I Anna']),
+    ]
+)
+def get_requests_3(request):
+    """Return requests for problem 3."""
+    return request.param
+
+
 # fixture for expected results
 @pytest.fixture(
     params=[
         ['Alexander_I 4', 'Alexei 1', 'Anna 1', 'Elizabeth 1', 'Nicholaus_I 4', 'Paul_I 3', 'Peter_I 0', 'Peter_II 2',
          'Peter_III 2'],
-        [],
     ]
 )
 def expected_results_1(request):
-    """expected results for problem 1"""
+    """Return expected results for problem 1."""
     return request.param
 
 
+@pytest.fixture(
+    params=[
+        '1 2 0',
+        pytest.param(
+            '0 0 0',
+            marks=pytest.mark.xfail(reason='Expected incorrect result')
+        )
+    ]
+)
+def expected_results_2(request):
+    """Return expected results for problem 2."""
+    return request.param
+
+
+@pytest.fixture(
+    params=[
+        ['Paul_I', 'Peter_I', 'Anna'],
+    ]
+)
+def expected_results_3(request):
+    """Return expected results for testing lca problem (problem 3)."""
+    return request.param
+
+
+# tests
 def test_count_of_all_tree_elements(actual_import, expected_results_1):
-    """testing problem 1"""
+    """Test output for count_of_all_tree_elements (problem 1)."""
     assert expected_results_1 == ancestry_1.get_all_tree_elements(actual_import[0], actual_import[1])
+
+
+def test_is_child(actual_import, get_requests_2, expected_results_2):
+    """Test output of is_child (problem 2)."""
+    assert expected_results_2 == ancestry_2.is_child(actual_import[0], actual_import[1],
+                                                     get_requests_2[0], get_requests_2[1])
+
+
+def test_find_lca(actual_import, get_requests_3, expected_results_3):
+    """Test output of get_lca (problem 3)."""
+    assert expected_results_3 == ancestry_3.get_lca(actual_import[0], actual_import[1],
+                                                    get_requests_3[0], get_requests_3[1])
 
 
 """
@@ -138,7 +194,7 @@ Alexei Paul_I
 
 	
 
-1 2 0
+'1 2 0'
 
 10
 ABFNWOZSQ PYMOTVGV

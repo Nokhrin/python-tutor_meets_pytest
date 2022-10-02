@@ -17,24 +17,38 @@
 если над файлом выполняется допустимая операция,
 или же Access denied, если операция недопустима.
 """
-files_count = int(input())
-files_settings = dict()
-for i in range(files_count):
-    full_input = input().split(sep=' ')
-    files_settings[full_input[0]] = [setting for setting in full_input[1:]]
 
-operations_count = int(input())
-for i in range(operations_count):
-    response = 'Access denied'
-    operation, file_name = input().split(sep=' ')
-    if operation == 'read':
-        if 'R' in files_settings[file_name]:
-            response = 'OK'
-    elif operation == 'write':
-        if 'W' in files_settings[file_name]:
-            response = 'OK'
-    elif operation == 'execute':
-        if 'X' in files_settings[file_name]:
-            response = 'OK'
 
-    print(response)
+def check_access(files_count: str, names_and_access: list, requests_count: str, requests: list) -> list:
+    """
+    :param files_count: number of files in system
+    :param names_and_access: list of <files_count> strings <filename> <access rights>
+    :param requests_count: number of requests
+    :param requests: list of <requests_count> strings <operation> <filename>
+    :return: list of <requests_count> strings: <OK> for acceptable operation, <Access denied> otherwise
+    """
+
+    files_count = int(files_count)
+    files_settings = dict()
+    for i in range(files_count):
+        full_input = names_and_access[i].split(sep=' ')
+        files_settings[full_input[0]] = [setting for setting in full_input[1:]]
+
+    operations_count = int(requests_count)
+    response_list = []
+    for i in range(operations_count):
+        response = 'Access denied'
+        operation, file_name = requests[i].split(sep=' ')
+        if operation == 'read':
+            if 'R' in files_settings[file_name]:
+                response = 'OK'
+        elif operation == 'write':
+            if 'W' in files_settings[file_name]:
+                response = 'OK'
+        elif operation == 'execute':
+            if 'X' in files_settings[file_name]:
+                response = 'OK'
+
+        response_list.append(response)
+
+    return response_list

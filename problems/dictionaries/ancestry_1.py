@@ -14,37 +14,45 @@
 После вывода имени каждого элемента необходимо вывести его высоту.
 """
 
-children_count = int(input())
-child_parent_dict = dict()
 
-parents_list = []
+def get_all_tree_elements(children_count: str, child_parent_list: list) -> list:
+    """
+    Collect all nodes and their heights from the tree
 
-for i in range(children_count - 1):
-    child, parent = input().split(sep=' ')
-    if child not in child_parent_dict.keys():
-        child_parent_dict[child] = parent
-        parents_list.append(parent)
+    :param children_count: number of elements in family tree
+    :param child_parent_list: list of strings "child parent"
+    :return: list of all tree elements in alphabetic order
+    """
+    child_parent_dict = dict()
+    parents_list = []
 
-for parent in parents_list:
-    if parent not in child_parent_dict.keys():
-        child_parent_dict[parent] = ''
+    for i in range(int(children_count) - 1):
+        child, parent = child_parent_list[i].split(sep=' ')
+        if child not in child_parent_dict.keys():
+            child_parent_dict[child] = parent
+            parents_list.append(parent)
 
-parents_h_dict = dict()
-height = 0
-# find root parent (with height = 0)
-for child, parent in child_parent_dict.items():
-    if parent == '':
-        parents_h_dict[child] = height
+    for parent in parents_list:
+        if parent not in child_parent_dict.keys():
+            child_parent_dict[parent] = ''
 
-# count height
-iter_counter = len(child_parent_dict)
-while iter_counter > 0:
+    parents_h_dict = dict()
+    height = 0
+    # find root parent (with height = 0)
     for child, parent in child_parent_dict.items():
-        if parent in parents_h_dict.keys():
-            parents_h_dict[child] = parents_h_dict[parent] + 1
-    iter_counter -= 1
+        if parent == '':
+            parents_h_dict[child] = height
 
-# print result
-names_sorted_list = sorted([name for name in parents_h_dict.keys()])
-for name in names_sorted_list:
-    print(name, parents_h_dict[name])
+    # count height
+    iter_counter = len(child_parent_dict)
+    while iter_counter > 0:
+        for child, parent in child_parent_dict.items():
+            if parent in parents_h_dict.keys():
+                parents_h_dict[child] = parents_h_dict[parent] + 1
+        iter_counter -= 1
+
+    names_sorted_list = sorted([name for name in parents_h_dict.keys()])
+    result_list = []
+    for name in names_sorted_list:
+        result_list.append(f'{name} {parents_h_dict[name]}')
+    return result_list

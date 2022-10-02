@@ -2,8 +2,5 @@
 """Rather for practicing"""
 
 import pytest
+from tests.dictionaries import test_access_rights
 
-
-@pytest.fixture(scope='session')
-def ancestry_data():
-    """Provide input data for ancestry problem"""
