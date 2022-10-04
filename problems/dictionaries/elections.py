@@ -12,15 +12,28 @@
 для каждого из участника голосования определите число отданных за него голосов.
 Участников нужно выводить в алфавитном порядке.
 """
-total_records = int(input())
-candidates_votes_dict = {}
-for i in range(total_records):
-    name_votes = input().split(sep=' ')
-    name, votes = name_votes[0], int(name_votes[1])
-    if name in candidates_votes_dict.keys():
-        candidates_votes_dict[name] += votes
-    else:
-        candidates_votes_dict[name] = votes
 
-for name in sorted(list(candidates_votes_dict.keys())):
-    print(name + ' ' + str(candidates_votes_dict[name]))
+def count_voices(total_records: str, name_voices: str) -> list:
+    """
+    Count voices for each candidate.
+
+    :param total_records: expected number of entries with lastname and voices
+    :param name_voices: strings with lastname and voices
+    :return: list of strings <lastname> <total voices>
+    """
+
+    total_records = int(total_records)
+    candidates_votes_dict = {}
+    for i in range(total_records):
+        name_votes = name_voices[i].split(sep=' ')
+        name, votes = name_votes[0], int(name_votes[1])
+        if name in candidates_votes_dict.keys():
+            candidates_votes_dict[name] += votes
+        else:
+            candidates_votes_dict[name] = votes
+
+    result_list = []
+    for name in sorted(list(candidates_votes_dict.keys())):
+        result_list.append(f'{name} {str(candidates_votes_dict[name])}')
+
+    return result_list
