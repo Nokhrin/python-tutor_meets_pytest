@@ -20,32 +20,36 @@
 """
 
 
-def get_input():
-    """retrieve maximum guessed number and sets of guesses from user"""
-    max_number = int(input())
+def get_input(max_num, guess_response):
+    """Retrieve maximum guessed number and sets of guesses from user."""
+    max_number = int(max_num)
     guess_sets_list = []
+    input_count = 0
     while True:
-        user_input = input()
+        user_input = guess_response[input_count]
         if user_input != 'HELP':
             guess_numbers_set = set([int(number) for number in user_input.split(sep=' ')])
             guess_sets_list.append(guess_numbers_set)
         else:
             return max_number, guess_sets_list
+        input_count += 1
 
 
-numbers_count, list_of_guesses = get_input()
-whole_numbers_set = set(i for i in range(1, numbers_count + 1))
-possible_numbers_set = whole_numbers_set
+def get_possible_numbers(max_num_input: str, guess_input: list) -> list:
+    numbers_count, list_of_guesses = get_input(max_num_input, guess_input)
+    whole_numbers_set = set(i for i in range(1, numbers_count + 1))
+    possible_numbers_set = whole_numbers_set
 
-for guess_set in list_of_guesses:
-    current_set = possible_numbers_set & guess_set
-    if len(current_set) <= len(possible_numbers_set) // 2:
-        print('NO')
-        possible_numbers_set = possible_numbers_set - guess_set
-    else:
-        print('YES')
-        possible_numbers_set = possible_numbers_set - (whole_numbers_set - guess_set)
+    responses_list = []
+    for guess_set in list_of_guesses:
+        current_set = possible_numbers_set & guess_set
+        if len(current_set) <= len(possible_numbers_set) // 2:
+            responses_list.append('NO')
+            possible_numbers_set = possible_numbers_set - guess_set
+        else:
+            responses_list.append('YES')
+            possible_numbers_set = possible_numbers_set - (whole_numbers_set - guess_set)
 
-possible_numbers_list = [str(number) for number in sorted(list(possible_numbers_set))]
-result_str = ' '.join(possible_numbers_list)
-print(result_str)
+    possible_numbers_list = [str(number) for number in sorted(list(possible_numbers_set))]
+    responses_list.append(' '.join(possible_numbers_list))
+    return responses_list
